@@ -13,7 +13,7 @@ jobs:
       - name: Скачивание кода
         uses: actions/checkout@v4
 
-      - name: Генерация чистого AndroidManifest.xml и проверка кода
+      - name: Подготовка файлов проекта
         run: |
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
@@ -23,10 +23,8 @@ jobs:
               <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
               <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
               <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
               <uses-feature android:name="android.hardware.camera.flash" android:required="true" />
               <uses-feature android:name="android.hardware.sensor.light" android:required="true" />
-
               <application
                   android:allowBackup="true"
                   android:label="AutoFlashlight"
