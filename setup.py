@@ -197,9 +197,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -213,6 +212,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var btnToggle: Button
     private var sensorManager: SensorManager? = null
     private var lightSensor: Sensor? = null
+
+    private val permLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {
+        if (hasPermissions()) {
+            tvStatus.text = "Permissions granted! Tap Start"
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -260,12 +267,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             TimePickerDialog(this, { _, h, m ->
                 startHour = h; startMin = m
                 btnStart.text = "Start time: %02d:%02d".format(h, m)
-            }, startHour, startMin, true).show()
-        }
-
-        btnEnd.setOnClickListener {
-            TimePickerDialog(this, { _, h, m ->
-                endHour = h; endMin = m
+}, startHour, startMin, true).show()
+}
+btnEnd.setOnClickListener {
+TimePickerDialog(this, { _, h, m ->
+endHour = h; endMin = m
 btnEnd.text = "End time: %02d:%02d".format(h, m)
 }, endHour, endMin, true).show()
 }
@@ -322,13 +328,7 @@ perms.add(Manifest.permission.POST_NOTIFICATIONS)
 }
 val needed = perms.filter { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
 if (needed.isNotEmpty()) {
-ActivityCompat.requestPermissions(this, needed.toTypedArray(), 101)
-}
-}
-override fun onRequestPermissionsResult(requestCode: Int, permissions: Array, grantResults: IntArray) {
-super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-if (requestCode == 101 && hasPermissions()) {
-Toast.makeText(this, "Permissions granted! Tap Start", Toast.LENGTH_SHORT).show()
+permLauncher.launch(needed.toTypedArray())
 }
 }
 override fun onResume() {
@@ -347,17 +347,13 @@ sensorManager?.unregisterListener(this)
 override fun onSensorChanged(event: SensorEvent?) {
 if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
 val lux = event.values.firstOrNull() ?: 0f
-tvStatus.text = "Current light: ${lux.toInt()} lux\nService: ${if (LightMonitorService.isRunning) "Running" else "Stopped"}"
+val state = if (LightMonitorService.isRunning) "Running" else "Stopped"
+tvStatus.text = "Current light: ${lux.toInt()} lux | Service: $state"
 }
 }
 override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 }
 """
-with open("app/src/main/AndroidManifest.xml", "w") as f:
-    f.write(manifest_xml)
-
-with open("app/src/main/java/com/example/autoflashlight/LightMonitorService.kt", "w") as f:
-    f.write(service_kt)
-
-with open("app/src/main/java/com/example/autoflashlight/MainActivity.kt", "w") as f:
-    f.write(activity_kt)
+open("app/src/main/AndroidManifest.xml", "w").write(manifest_xml)
+open("app/src/main/java/com/example/autoflashlight/LightMonitorService.kt", "w").write(service_kt)
+open("app/src/main/java/com/example/autoflashlight/MainActivity.kt", "w").write(activity_kt)
