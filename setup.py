@@ -353,11 +353,8 @@ tvStatus.text = "Current light: ${lux.toInt()} lux\nService: ${if (LightMonitorS
 override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 }
 """
-with open("app/src/main/AndroidManifest.xml", "w") as f:
-    f.write(manifest_xml)
+with open("app/src/main/AndroidManifest.xml", "w").write(manifest_xml)
 
-with open("app/src/main/java/com/example/autoflashlight/LightMonitorService.kt", "w") as f:
-    f.write(service_kt)
+with open("app/src/main/java/com/example/autoflashlight/LightMonitorService.kt", "w").write(service_kt)
 
-with open("app/src/main/java/com/example/autoflashlight/MainActivity.kt", "w") as f:
-    f.write(activity_kt)
+with open("app/src/main/java/com/example/autoflashlight/MainActivity.kt", "w").write(activity_kt)
