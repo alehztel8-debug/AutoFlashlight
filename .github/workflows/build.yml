@@ -13,32 +13,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Prepare manifest and code
+      - name: Generate clean manifest
         run: |
           python3 -c '
-          a = chr(97) + "ndroid:" + chr(110) + "ame"
-          ns = "http://schemas." + "://android.com"
+          p = "".join(map(chr, [97,110,100,114,111,105,100]))
+          n = "".join(map(chr, [110,97,109,101]))
+          a = f"{p}:{n}"
+          u = "".join(map(chr, [104,116,116,112,58,47,47,115,99,104,101,109,97,115,46,97,110,100,114,111,105,100,46,99,111,109,47,97,112,107,47,114,101,115,47,97,110,100,114,111,105,100]))
           xml = f"""<?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="{ns}">
-              <uses-permission {a}="android.permission.CAMERA" />
-              <uses-permission {a}="android.permission.FLASHLIGHT" />
-              <uses-permission {a}="android.permission.FOREGROUND_SERVICE" />
-              <uses-permission {a}="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-              <uses-permission {a}="android.permission.POST_NOTIFICATIONS" />
-              <uses-feature {a}="android.hardware.camera.flash" android:required="true" />
-              <uses-feature {a}="android.hardware.sensor.light" android:required="true" />
-              <application
-                  android:allowBackup="true"
-                  android:label="AutoFlashlight"
-                  android:theme="@style/Theme.Material3.DayNight.NoActionBar">
-                  <activity {a}=".MainActivity" android:exported="true">
+          <manifest xmlns:{p}="{u}">
+              <uses-permission {a}="{p}.permission.CAMERA" />
+              <uses-permission {a}="{p}.permission.FLASHLIGHT" />
+              <uses-permission {a}="{p}.permission.FOREGROUND_SERVICE" />
+              <uses-permission {a}="{p}.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+              <uses-permission {a}="{p}.permission.POST_NOTIFICATIONS" />
+              <uses-feature {a}="{p}.hardware.camera.flash" {p}:required="true" />
+              <uses-feature {a}="{p}.hardware.sensor.light" {p}:required="true" />
+              <application {p}:allowBackup="true" {p}:label="AutoFlashlight" {p}:theme="@style/Theme.Material3.DayNight.NoActionBar">
+                  <activity {a}=".MainActivity" {p}:exported="true">
                       <intent-filter>
-                          <action {a}="android.intent.action.MAIN" />
-                          <category {a}="android.intent.category.LAUNCHER" />
+                          <action {a}="{p}.intent.action.MAIN" />
+                          <category {a}="{p}.intent.category.LAUNCHER" />
                       </intent-filter>
                   </activity>
-                  <service {a}=".LightMonitorService" android:enabled="true" android:exported="false" android:foregroundServiceType="specialUse">
-                      <property {a}="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Monitoring ambient light" />
+                  <service {a}=".LightMonitorService" {p}:enabled="true" {p}:exported="false" {p}:foregroundServiceType="specialUse">
+                      <property {a}="{p}.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" {p}:value="Monitoring ambient light" />
                   </service>
               </application>
           </manifest>"""
