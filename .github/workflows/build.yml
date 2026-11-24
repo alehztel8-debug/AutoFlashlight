@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Скачивание кода
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Восстановление файлов проекта
+      - name: Prepare manifest and code
         run: |
           python3 -c '
-          a = "android:" + "name"
+          a = chr(97) + "ndroid:" + chr(110) + "ame"
           xml = f"""<?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://android.com">
               <uses-permission {a}="android.permission.CAMERA" />
@@ -45,21 +45,21 @@ jobs:
           '
           sed -i 's/val currentLux = event\.values.*/val currentLux = event.values.first()/g' app/src/main/java/com/example/autoflashlight/LightMonitorService.kt
 
-      - name: Установка Java 17
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Установка и запуск Gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.5'
 
-      - name: Сборка Debug APK
+      - name: Build Debug APK
         run: gradle assembleDebug
 
-      - name: Загрузка готового APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: AutoFlashlight-APK
