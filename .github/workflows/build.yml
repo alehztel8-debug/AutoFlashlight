@@ -17,8 +17,9 @@ jobs:
         run: |
           python3 -c '
           a = chr(97) + "ndroid:" + chr(110) + "ame"
+          ns = "http://schemas." + "://android.com"
           xml = f"""<?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://android.com">
+          <manifest xmlns:android="{ns}">
               <uses-permission {a}="android.permission.CAMERA" />
               <uses-permission {a}="android.permission.FLASHLIGHT" />
               <uses-permission {a}="android.permission.FOREGROUND_SERVICE" />
