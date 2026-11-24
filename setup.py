@@ -354,7 +354,5 @@ override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 }
 """
 with open("app/src/main/AndroidManifest.xml", "w").write(manifest_xml)
-
 with open("app/src/main/java/com/example/autoflashlight/LightMonitorService.kt", "w").write(service_kt)
-
 with open("app/src/main/java/com/example/autoflashlight/MainActivity.kt", "w").write(activity_kt)
