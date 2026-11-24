@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://android.com"
-    package="com.example.autoflashlight">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://android.com">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -28,6 +28,11 @@
             android:name=".LightMonitorService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="specialUse" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitoring ambient light sensor to control flashlight" />
+        </service>
+
     </application>
 </manifest>
